@@ -1,31 +1,49 @@
 import java.util.Scanner;
 
 public class spooky {
-  public static void main(String[]args){
+  public static void main(String[] args) {
     Scanner input = new Scanner(System.in);
-    int N, L, S, a, b, s;
+    int N, L, S;
     N = input.nextInt();
     L = input.nextInt();
     S = input.nextInt();
-    //create an array that keeps track of the spookiness of each house
-    int[] spookiness = new int[L];
-    //outer loop to read the range of indexes
-    for(int i = 0; i < N; i++){
-        a = input.nextInt();
-        b = input.nextInt();
-        s = input.nextInt();
-        //inner loop to calculate the spookiness in that range
-        for(int x = a - 1; x < b; x++){
-            spookiness[x] += s;
-        }
+
+    int[] aValues = new int[N];
+    int[] bValues = new int[N];
+    int[] sValues = new int[N];
+
+    for (int i = 0; i < N; i++) {
+      aValues[i] = input.nextInt();
+      bValues[i] = input.nextInt();
+      sValues[i] = input.nextInt();
     }
-    //loop that counts which house kenny can get candy from
+
+    int maxB = 0;
+    int minA = aValues[0];
+    for (int i = 0; i < N; i++) {
+      if (bValues[i] > maxB) {
+        maxB = bValues[i];
+      }
+      if (aValues[i] < minA) {
+        minA = aValues[i];
+      }
+    }
+
+    int[] spookiness = new int[(maxB - minA) + 1];
+    for (int i = 0; i < N; i++) {
+      for (int x = aValues[i] - minA; x <= (bValues[i] - minA); x++) {
+        spookiness[x] += sValues[i];
+      }
+    }
+
     int count = 0;
-    for(int i = 0; i < L; i++){
-        if(spookiness[i] < S){
-            count ++;
-        }
+    for (int i = 0; i < spookiness.length; i++) {
+      if (spookiness[i] >= S) {
+        count++;
+      }
     }
-    System.out.println(count);
-  } 
+    int total = L - count;
+    System.out.println(total);
+    input.close();
+  }
 }
